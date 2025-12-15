@@ -9,10 +9,13 @@ A Nutanix node can join a cluster only if its hypervisor version and AOS version
 Foundation is a Nutanix deployment tool
 It is used to install (image) or configure Nutanix nodes.
 You can use Foundation in two ways
-Configure a pre-imaged node
+
+***Configure a pre-imaged node***
+
 👉 Node already has a hypervisor and AOS installed.
 Image a fresh node
 👉 Foundation installs the hypervisor + AOS you choose.
+
 All nodes must have the same versions
 Hypervisor version must be same on all nodes
 AOS version must be same on all nodes
