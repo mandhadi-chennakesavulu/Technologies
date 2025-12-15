@@ -97,3 +97,44 @@ Create cluster
 ```
 Foundation installs software. Expand Cluster adds nodes. DiscoveryOS is only for detection. Bare-metal needs Foundation first.
 ```
+
+```
+Start
+  |
+  v
+Do you already have a running Nutanix cluster?
+  |
+  |-- NO --> Use FOUNDATION
+  |           - Install Hypervisor
+  |           - Install AOS
+  |           - Create Cluster
+  |
+  |-- YES --> What software is on the new node?
+              |
+              |-- Hypervisor + AOS (version mismatch)
+              |       --> Prism → Expand Cluster
+              |
+              |-- DiscoveryOS only
+              |       --> Prism → Expand Cluster
+              |
+              |-- No software (Bare-metal)
+                      |
+                      v
+                  Use FOUNDATION first
+                      |
+                  Install Hypervisor + AOS
+                      |
+                  Then use Prism → Expand Cluster
+
+```
+
+```
+| Situation                                   | Tool to Use                     | Why |
+|--------------------------------------------|----------------------------------|-----|
+| New cluster (no cluster exists)             | Foundation                       | Installs hypervisor and AOS |
+| Node has DiscoveryOS only                  | Prism → Expand Cluster           | Can image DiscoveryOS nodes |
+| Node has Hypervisor + AOS (version mismatch)| Prism → Expand Cluster           | Re-images to match cluster |
+| Node has no software (bare-metal node)     | Foundation → then Expand Cluster | Expand Cluster can't image bare-metal |
+| Adding node to an existing cluster         | Prism → Expand Cluster           | Supported way to scale cluster |
+
+```
