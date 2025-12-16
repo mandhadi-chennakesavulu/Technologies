@@ -62,4 +62,4 @@ ESXI = Switch and AHV = Bridge [ vir-bro , bro ]
 br0 without ip = bridge
 br0 with ip is = hypervisor
 ```
-![AHV FLOW](Nutanix/Learning/images/day1.jpeg)
+![alt text](image-1.png)
