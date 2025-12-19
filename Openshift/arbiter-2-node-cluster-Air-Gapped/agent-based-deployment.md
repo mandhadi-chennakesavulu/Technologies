@@ -123,7 +123,6 @@ arbiter:
   replicas: 1
 networking:
   networkType: OVNKubernetes
-  networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
