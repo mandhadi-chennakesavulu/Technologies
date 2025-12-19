@@ -8,17 +8,17 @@ metadata:
 # Master-1 IP acts as bootstrap (rendezvous)
 rendezvousIP: 190.170.20.73
 
-  #additionalNTPSources:
-  #- 190.170.20.113
+additionalNTPSources:
+#  - 190.170.20.113
 
 hosts:
-  - hostname: rhcos-master1-arbiter.lab.kuberox.net
+  - hostname: rhcos-master1.arbiter.lab.kuberox.net
     role: master
     interfaces:
       - name: ens33
         macAddress: 00:50:56:85:4e:34
-          # rootDeviceHints:
-          #deviceName: /dev/nvme0n1
+ #   rootDeviceHints:
+  #    deviceName: /dev/nvme0n1
     networkConfig:
       interfaces:
         - name: ens33
@@ -36,13 +36,13 @@ hosts:
           server:
             - 190.170.20.113
 
-  - hostname: rhcos-master2-keshav.lab.kuberox.net
+  - hostname: rhcos-master2.arbiter.lab.kuberox.net
     role: master
     interfaces:
       - name: ens33
         macAddress: 00:50:56:85:83:0e
-          #    rootDeviceHints:
-          #deviceName: /dev/nvme0n1
+   # rootDeviceHints:
+    #  deviceName: /dev/nvme0n1
     networkConfig:
       interfaces:
         - name: ens33
@@ -60,13 +60,13 @@ hosts:
           server:
             - 190.170.20.113
 
-  - hostname: rhcos-arbiter-keshav.lab.kuberox.net
+  - hostname: rhcos-arbiter.arbiter.lab.kuberox.net
     role: arbiter
     interfaces:
       - name: ens33
         macAddress: 00:50:56:85:33:e9
-          #rootDeviceHints:
-          # deviceName: /dev/nvme0n1
+   # rootDeviceHints:
+    #  deviceName: /dev/nvme0n1
     networkConfig:
       interfaces:
         - name: ens33
