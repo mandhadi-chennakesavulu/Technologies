@@ -9,16 +9,16 @@ metadata:
 rendezvousIP: 190.170.20.73
 
 additionalNTPSources:
-#  - 190.170.20.113
+  - 190.170.20.113
 
 hosts:
-  - hostname: rhcos-master1.arbiter.lab.kuberox.net
+  - hostname: rhcos-master1-arbiter.lab.kuberox.net
     role: master
     interfaces:
       - name: ens33
         macAddress: 00:50:56:85:4e:34
- #   rootDeviceHints:
-  #    deviceName: /dev/nvme0n1
+#    rootDeviceHints:
+#      deviceName: /dev/nvme0n1
     networkConfig:
       interfaces:
         - name: ens33
@@ -36,13 +36,13 @@ hosts:
           server:
             - 190.170.20.113
 
-  - hostname: rhcos-master2.arbiter.lab.kuberox.net
+  - hostname: rhcos-master2-keshav.lab.kuberox.net
     role: master
     interfaces:
       - name: ens33
         macAddress: 00:50:56:85:83:0e
-   # rootDeviceHints:
-    #  deviceName: /dev/nvme0n1
+#    rootDeviceHints:
+#      deviceName: /dev/nvme0n1
     networkConfig:
       interfaces:
         - name: ens33
@@ -60,13 +60,13 @@ hosts:
           server:
             - 190.170.20.113
 
-  - hostname: rhcos-arbiter.arbiter.lab.kuberox.net
+  - hostname: rhcos-arbiter-keshav.lab.kuberox.net
     role: arbiter
     interfaces:
       - name: ens33
         macAddress: 00:50:56:85:33:e9
-   # rootDeviceHints:
-    #  deviceName: /dev/nvme0n1
+#    rootDeviceHints:
+#      deviceName: /dev/nvme0n1
     networkConfig:
       interfaces:
         - name: ens33
@@ -85,8 +85,9 @@ hosts:
             - 190.170.20.113
 
 
-
 ```
+
+
 
 **Intsall Required Packages**
 ```
@@ -113,30 +114,48 @@ baseDomain: lab.kuberox.net
 metadata:
   name: arbiter
 compute:
-- name: worker
-  replicas: 0
+  - architecture: amd64
+    hyperthreading: Enabled
+    name: worker
+    platform: {}
+    replicas: 0
 controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
   name: master
+  platform:
+    baremetal: {}
   replicas: 2
 arbiter:
-  name: arbiter
+  architecture: amd64
+  hyperthreading: Enabled
   replicas: 1
+  name: arbiter
+  platform:
+    baremetal: {}
 networking:
   networkType: OVNKubernetes
+  machineNetwork:
+  - cidr: 190.170.20.0/23
   clusterNetwork:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
   serviceNetwork:
-  - 172.30.0.0/16
-  machineNetwork:
-  - cidr: 190.170.20.0/23
+    - 172.30.0.0/16
 platform:
   baremetal:
-    apiVIP: 190.170.20.76
-    ingressVIP: 190.170.20.77
+    hosts:
+      - name: cluster-master-0
+        role: master
 
+      - name: cluster-master-1
+        role: master
+
+      - name: cluster-arbiter-0
+        role: arbiter
 pullSecret: '{"auths":{"cloud.openshift.com":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfNjkyNGM3MTQyNzVjNGM0ZGFiZjcwMTRkNTVhM2M2MWI6RkVPVjBFOVBZSUVJODFVUUI4WVRaSEI3NkRIT0VWVE9ZNFZUVVgxOVQ4MVpKSUZSMFhZOVhBUzlDVTUzNFo2MQ==","email":"chennakesavulu@kuberox.com"},"quay.io":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfNjkyNGM3MTQyNzVjNGM0ZGFiZjcwMTRkNTVhM2M2MWI6RkVPVjBFOVBZSUVJODFVUUI4WVRaSEI3NkRIT0VWVE9ZNFZUVVgxOVQ4MVpKSUZSMFhZOVhBUzlDVTUzNFo2MQ==","email":"chennakesavulu@kuberox.com"},"registry.connect.redhat.com":{"auth":"fHVoYy1wb29sLWJmZTBkMjhiLTcxNWItNDMzNS05NGRjLTdlYTQ4ZTE4NWIyOTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTBZVGRqWWpka05UZG1PRGcwT0dNMk9ESXpObVpsT0RkaFl6a3lNV0ppTXlKOS5CMVhBZjBLXzNhTzdLVHMxLXVsb1BuLUllZ1QtazFJY1RodzU1dS1vcGNvMlViMTg4b2IxT0xHSDd2Tm5KZTU0WEpDVnVIZXJNYmdZbFV0S0dtakg3bi1WdzcyMkdVY1UycDVIcEFwdGRuY1QxZk1aai1uaGlDY0U5eEc3MzNZcXAycWpyQ3FUSWdmWVNfZkRkTGxQa3EtUTVSOXEwenc3ZHQ0c09jX2ZuMzRuYW9hSjNoNGsxSkcyNkhTeTI3RWlqdkxXNThOSFN1R0FKeUhmN3ctUnNmVXQ3Q09qMDlQQzB1RVVzZnhOTktRUkVJMXpZMVdIT3UwemdkVzNNMGNqT09fRDVDMlFsMDVYcmFWV2huUUt4d1BqVmtHa3N3bnJqSXBIcU1JY0VzUFNlbnFGQjFNclFiMkQxclFES0E4bU5QR21EZTNKdGNvdkNYYnlrUGdMRm1DNnZrMEMzU0ZPLWY0WUpUMmNUZ29GQVBHVE1iVXE1ZnZGMHlzek1pU0tENzJuVU5ZemxFLW5yMlhJSDlMbXVjTnEwMnNuZENFWVJZbmZBUWVXemc5SF9XOTdTY29iNjR1eFpkS090UFJXcDdBenpTWHRLMm9hQVFPUVpPTkwtc2lab3ZCUF9KSUx2NkpaaElQWnNsbWJ1UjZ4M0pTc1dNTndEWnlCN3ZEUWhIX2Y3SzNzVnZtbXphTXJCdTFOVWxRNURaNm9zbV9LQngwZUFiVE91d19LNGRiZU9jSmljenRYYUdHMmlpLWpkQXRyVUh0QnB3R0ZQRHVHTEE5ZVdoQVlmX29Fb3hJYjZqUlpVMUNhVVpVV3FGUzZtTWJRT0RDQVhrbVB6eTB3TnVtRmZHTkdkN05BQXlYQ1E3aVpSMUtoMTFZSFloUFZJc21PWDJuczl2aw==","email":"chennakesavulu@kuberox.com"},"registry.redhat.io":{"auth":"fHVoYy1wb29sLWJmZTBkMjhiLTcxNWItNDMzNS05NGRjLTdlYTQ4ZTE4NWIyOTpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSTBZVGRqWWpka05UZG1PRGcwT0dNMk9ESXpObVpsT0RkaFl6a3lNV0ppTXlKOS5CMVhBZjBLXzNhTzdLVHMxLXVsb1BuLUllZ1QtazFJY1RodzU1dS1vcGNvMlViMTg4b2IxT0xHSDd2Tm5KZTU0WEpDVnVIZXJNYmdZbFV0S0dtakg3bi1WdzcyMkdVY1UycDVIcEFwdGRuY1QxZk1aai1uaGlDY0U5eEc3MzNZcXAycWpyQ3FUSWdmWVNfZkRkTGxQa3EtUTVSOXEwenc3ZHQ0c09jX2ZuMzRuYW9hSjNoNGsxSkcyNkhTeTI3RWlqdkxXNThOSFN1R0FKeUhmN3ctUnNmVXQ3Q09qMDlQQzB1RVVzZnhOTktRUkVJMXpZMVdIT3UwemdkVzNNMGNqT09fRDVDMlFsMDVYcmFWV2huUUt4d1BqVmtHa3N3bnJqSXBIcU1JY0VzUFNlbnFGQjFNclFiMkQxclFES0E4bU5QR21EZTNKdGNvdkNYYnlrUGdMRm1DNnZrMEMzU0ZPLWY0WUpUMmNUZ29GQVBHVE1iVXE1ZnZGMHlzek1pU0tENzJuVU5ZemxFLW5yMlhJSDlMbXVjTnEwMnNuZENFWVJZbmZBUWVXemc5SF9XOTdTY29iNjR1eFpkS090UFJXcDdBenpTWHRLMm9hQVFPUVpPTkwtc2lab3ZCUF9KSUx2NkpaaElQWnNsbWJ1UjZ4M0pTc1dNTndEWnlCN3ZEUWhIX2Y3SzNzVnZtbXphTXJCdTFOVWxRNURaNm9zbV9LQngwZUFiVE91d19LNGRiZU9jSmljenRYYUdHMmlpLWpkQXRyVUh0QnB3R0ZQRHVHTEE5ZVdoQVlmX29Fb3hJYjZqUlpVMUNhVVpVV3FGUzZtTWJRT0RDQVhrbVB6eTB3TnVtRmZHTkdkN05BQXlYQ1E3aVpSMUtoMTFZSFloUFZJc21PWDJuczl2aw==","email":"chennakesavulu@kuberox.com"}}}'
 sshKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCnJX3AKwUm5Aq6R8h4VyCOwsUzWvXDAVUH1RzvdebK+0SnTa26xaUNXEqzpo2x3QlZnBNqxVJnRPX0Y5VAWZGWRarARPYz2ox2aFVDydpwr1dtiZCbBUzEZUlq6AEIhMAtfEUHuhzt1mqTGm6vb3qCCTx74arLcsfjD4XX/1cpf6guAcW6OAprwT1pfngdSRmvODeysYAClHPvqHjHp0Y+m9yQMlAsDokdLJSfxb67N2ctwXDBwdT400FR/Ev2cu5joXKp/nx6qH0vpbbVUGo4j0wGLsITUe/4BpVy4BsVyr0/xAVX2mDpqtRD8mAl0OvBJb3D1HcWzzQY0/ky972cHKOeQANao4qwtUft74d3TvqHId5wEG5HUwG3CZW2FNizYGchLRIK69jBOBHyP2BNvGSATHHEmizmNATJZi+/XhRaRHSeeNQ6ouDwcK4APVYs+ZHfwP+3x9RmAa8fFR8qRLDZ0L/fpaiBFl7GLdo6nSenUQnRXDiGeF0VhN3NC4M= root@bastion.arbiter.lab.kuberox.net'
+
 
 
 ```
@@ -160,4 +179,9 @@ openshift-install agent wait-for bootstrap-complete --log-level=info
 if any issue faced during the booting like failue ssh into that node and type:
 
 journalctl -xe -f
+```
+
+
+```
+https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/installing_an_on-premise_cluster_with_the_agent-based_installer/index#installing-ocp-agent-tui_installing-with-agent-based-installer
 ```
