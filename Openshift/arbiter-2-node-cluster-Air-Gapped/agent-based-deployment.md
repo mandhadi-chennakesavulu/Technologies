@@ -364,20 +364,30 @@ add in parameter for all the nodes
 
 disk.EnableUUID = TRUE
 ```
+![alt text](image-2.png)
 
 **After Booting the iso**
 ```
 edit config
 add gateway and save and exit 
+```
+![alt text](image-7.png)
+![alt text](image-6.png)
+![alt text](image-5.png)
+![alt text](image-4.png)
+
+**click**
+``` 
 cntrl + c
 Booting will start now and it will pull required images.
 ```
+![network has been set](image-1.png)
 **Validate the updats when we run the below commands**
 ```
 openshift-install agent wait-for bootstrap-complete --log-level=debug
 openshift-install agent wait-for bootstrap-complete --log-level=info
 ```
-
+![alt text](image-3.png)
 ```
 if any issue faced during the booting like failue ssh into that node and type:
 
