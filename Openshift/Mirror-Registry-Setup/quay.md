@@ -421,3 +421,5 @@ status: {}
 ```
 
 ![alt text](<images/Screenshot 2025-12-21 125515.png>)
+
+[operator-hub](https://access.redhat.com/labs/ocpouic/?upgrade_path=4.18 to 4.19)
