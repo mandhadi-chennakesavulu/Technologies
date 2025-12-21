@@ -100,6 +100,91 @@ additionalTrustBundle: |
 
 **Agent config file**
 ```
+cat agent-config.yaml.bkp
+
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+  name: arbiter
+
+# Master-1 IP acts as bootstrap (rendezvous)
+rendezvousIP: 190.170.40.80
+
+additionalNTPSources:
+  - 190.170.40.79
+
+hosts:
+  - hostname: master1.arbiter.lab.kuberox.net
+    role: master
+    interfaces:
+      - name: ens33
+        macAddress: 00:50:56:85:e6:27
+#    rootDeviceHints:
+#      deviceName: /dev/nvme0n1
+    networkConfig:
+      interfaces:
+        - name: ens33
+          type: ethernet
+          state: up
+          mac-address: 00:50:56:85:e6:27
+          ipv4:
+            enabled: true
+            address:
+              - ip: 190.170.40.80
+                prefix-length: 22
+            dhcp: false
+      dns-resolver:
+        config:
+          server:
+            - 190.170.40.79
+
+  - hostname: master2.arbiter.lab.kuberox.net
+    role: master
+    interfaces:
+      - name: ens33
+        macAddress: 00:50:56:85:6d:15
+#    rootDeviceHints:
+#      deviceName: /dev/nvme0n1
+    networkConfig:
+      interfaces:
+        - name: ens33
+          type: ethernet
+          state: up
+          mac-address: 00:50:56:85:6d:15
+          ipv4:
+            enabled: true
+            address:
+              - ip: 190.170.40.81
+                prefix-length: 22
+            dhcp: false
+      dns-resolver:
+        config:
+          server:
+            - 190.170.40.79
+
+  - hostname: arbiter.arbiter.lab.kuberox.net
+    role: arbiter
+    interfaces:
+      - name: ens33
+        macAddress: 00:50:56:85:0d:f0
+#    rootDeviceHints:
+#      deviceName: /dev/nvme0n1
+    networkConfig:
+      interfaces:
+        - name: ens33
+          type: ethernet
+          state: up
+          mac-address: 00:50:56:85:0d:f0
+          ipv4:
+            enabled: true
+            address:
+              - ip: 190.170.40.82
+                prefix-length: 22
+            dhcp: false
+      dns-resolver:
+        config:
+          server:
+            - 190.170.40.79
 
 ```
 
@@ -292,4 +377,8 @@ zone "40.170.190.in-addr.arpa." IN {
 include "/etc/named.rfc1912.zones";
 include "/etc/named.root.key";
 
+```
+```
+setenforce 0
+disable firewall
 ```
