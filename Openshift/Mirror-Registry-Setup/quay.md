@@ -1,5 +1,5 @@
 ```jsx
-mkdir mirror-reg
+mkdir -p mirror-reg
 cd mirror-reg
 
 now we create lvm for sdb
