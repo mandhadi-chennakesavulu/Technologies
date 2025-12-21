@@ -35,15 +35,10 @@ networking:
     - 172.30.0.0/16
 platform:
   baremetal:
-    hosts:
-      - name: cluster-master-0
-        role: master
-
-      - name: cluster-master-1
-        role: master
-
-      - name: cluster-arbiter-0
-        role: arbiter
+    apiVIPs:
+      - 190.170.40.79
+    ingressVIPs:
+      - 190.170.40.80
 pullSecret: '{
   "auths": {
     "quay.arbiter.lab.kuberox.net:8443": {
@@ -381,4 +376,5 @@ include "/etc/named.root.key";
 ```
 setenforce 0
 disable firewall
+sudo dnf install -y nmstate
 ```
