@@ -4,11 +4,13 @@ export ARCH=x86_64
 
 ```
 ```
-curl -L https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.ec.9/openshift-client-linux-4.21.0-okd-scos.ec.9.tar.gz -o oc.tar.gz
+curl -L https://github.com/okd-project/okd/releases/download/4.19.0-okd-scos.15/openshift-client-linux-4.19.0-okd-scos.15.tar.gz -o oc.tar.gz
+
 ```
 
 ```
-curl -L https://github.com/okd-project/okd/releases/download/4.21.0-okd-scos.ec.9/openshift-install-linux-4.21.0-okd-scos.ec.9.tar.gz -o openshift-install-linux.tar.gz
+curl -L https://github.com/okd-project/okd/releases/download/4.19.0-okd-scos.15/openshift-install-linux-4.19.0-okd-scos.15.tar.gz -o openshift-install-linux.tar.gz
+
 ```
 
 ```
@@ -18,27 +20,6 @@ tar -xzvf openshift-install-linux.tar.gz
 ```
 sudo cp oc kubectl openshift-install /usr/local/bin/
 sudo chmod +x /usr/local/bin/oc /usr/local/bin/kubectl /usr/local/bin/openshift-install
-```
-**Retrieve FCOS ISO URL**
-```
-export ISO_URL=$(openshift-install coreos print-stream-json \
-  | jq -r '.architectures."'$ARCH'".artifacts.metal.formats.iso.disk.location')
-
-
-echo "$ISO_URL"
-
-output: 
-https://rhcos.mirror.openshift.com/art/storage/prod/streams/c10s/builds/10.0.20251103-0/x86_64/scos-10.0.20251103-0-live-iso.x86_64.iso
-
-```
-**Download FCOS Live ISO**
-```
-curl -L $ISO_URL -o fcos-live.iso
-
-Verify: 
-ls -lh fcos-live.iso
-[root@rke-master snp-okd-cluster]# ls -lh fcos-live.iso
--rw-r--r--. 1 root root 876M Dec 23 09:12 fcos-live.iso
 ```
 
 **Deployment**
